@@ -1,0 +1,26 @@
+version: "3"
+
+vars:
+  mainPath: "./cmd/sso/main.go"
+  configPath: "./config/local.yaml"
+
+  migratorPath: "./cmd/migrator"
+  migrationPath: "./migrations"
+  storagePath: "./storage/sso.db"
+
+  testMigrationPath: "./tests/migrations"
+  testMigrationTable: "migration_test"
+
+tasks:
+  run:
+    desc: Run main file
+    cmds:
+      - go run {{.mainPath}} --config={{.configPath}}
+  migrate:
+    desc: Create db with migration
+    cmds:
+      - go run {{.migratorPath}} --migration-path={{.migrationPath}} --storage-path={{.storagePath}}
+  test-migrate:
+    desc: test migration
+    cmds: 
+      - go run {{.migratorPath}} --migration-path={{.testMigrationPath}} --storage-path={{.storagePath}} --migration-table={{.testMigrationTable}}
